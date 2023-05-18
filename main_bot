@@ -414,24 +414,24 @@ def open_second_window():
 
     def corner_inrow():
         if button1.cget('text') == 'X':
-            if button3.cget('text') == '':
+            if button3.cget('text') == '' and button2.cget('text') == '':
                 button3.config(text='X')
-            else:
+            elif button7.cget('text') == '' and button4.cget('text') == '':
                 button7.config(text='X')
         elif button3.cget('text') == 'X':
-            if button1.cget('text') == '':
+            if button1.cget('text') == '' and button2.cget('text') == '':
                 button1.config(text='X')
-            else:
+            elif button9.cget('text') == '' and button6.cget('text') == '':
                 button9.config(text='X')
         elif button7.cget('text') == 'X':
-            if button1.cget('text') == '':
+            if button1.cget('text') == '' and button4.cget('text') == '':
                 button1.config(text='X')
-            else:
+            elif button9.cget('text') == '' and button8.cget('text') == '':
                 button9.config(text='X')
         elif button9.cget('text') == 'X':
-            if button7.cget('text') == '':
+            if button7.cget('text') == '' and button8.cget('text') == '':
                 button7.config(text='X')
-            else:
+            elif button3.cget('text') == '' and button6.cget('text') == '':
                 button3.config(text='X')
 
     def update_button_text(bttn_name, new_text):
@@ -533,7 +533,7 @@ def open_second_window():
                 else:
                     update_button_text(random.choice(find_unpressed_button(corners, moves_logger)), 'X')  # SETUP TRAP
                     self.state = self.bot_start_center_final
-                    global bot_strt_mid_final
+
                     bot_strt_mid_final = True
 
             else:
@@ -705,7 +705,7 @@ def open_second_window():
             else:
                 update_button_text(random.choice(find_unpressed_button(buttons_str, moves_logger)), 'X')
                 self.state = self.check_winner
-                global check_winner_end
+
                 check_winner_end = True
 
         def check_winner(self):
