@@ -65,6 +65,7 @@ def open_second_window():
     second_window = tk.Toplevel(root)
     second_window.title("TicTacToe")
     second_window.config(padx=30, pady=30, bg='#505251')
+    second_window.resizable(0, 0)  # Disable resizing
     button_frame = Frame(second_window, bg='#505251')
     button_frame.grid(row=0, column=0)
     global player_x, player_o
