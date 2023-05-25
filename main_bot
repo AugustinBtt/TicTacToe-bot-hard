@@ -35,7 +35,6 @@ human_go_center = None
 human_1st_is_center = None
 human_1st_cntr3 = None
 human_1st_cntr4 = None
-check_winner_end = None
 human_go_corner = None
 human_1st_diagonal = None
 human_1st_diagonal2 = None
@@ -44,6 +43,7 @@ human_1st_no_diag2 = None
 human_first_edge = None
 human_first_edge2 = None
 human_first_edge3 = None
+human_first_edge_end = None
 # ---------------------------------------------------------- #
 
 # Create the main (welcome) window
@@ -282,7 +282,7 @@ def open_second_window():
             if start_center2nd:
                 button.config(text="O")
                 moves_logger.append(button_name(button))
-                bot.bot_start_center_second()
+                bot.bot_start_center()
             elif bot_corner1:
                 button.config(text="O")
                 moves_logger.append(button_name(button))
@@ -334,6 +334,7 @@ def open_second_window():
             elif human_1st:
                 button.config(text="O")
                 moves_logger.append(button_name(button))
+                print('Human first is executed')
                 bot.human_first()
             elif human_go_center:
                 button.config(text="O")
@@ -351,10 +352,6 @@ def open_second_window():
                 button.config(text="O")
                 moves_logger.append(button_name(button))
                 bot.human_1st_center4()
-            elif check_winner_end:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
-                bot.check_winner()
             elif human_go_corner:
                 button.config(text="O")
                 moves_logger.append(button_name(button))
@@ -387,6 +384,10 @@ def open_second_window():
                 button.config(text="O")
                 moves_logger.append(button_name(button))
                 bot.human_1st_edge_3()
+            elif human_first_edge_end:
+                button.config(text="O")
+                moves_logger.append(button_name(button))
+                bot.human_1st_edge_end()
 
 
     edges= ['button4', 'button2', 'button6', 'button8']
@@ -476,25 +477,16 @@ def open_second_window():
             if self.bot_first:
                 self.state = self.bot_first_move
             else:
-                global human_1st
-                human_1st = True
-                print('human first is set to True')
-                self.state = self.human_first
+                self.state = self.human_first0
 
         def start(self):
             self.state()
-
-        def win_bttn(self):
-            winning_button = button_to_win(moves_logger, winning_combinations)
-            if winning_button:
-                update_button_text(winning_button, 'X')
-                is_winner()
 
         def bot_first_move(self):
             start_center = random.choice([True, False])
             if start_center:
                 update_button_text('button5', 'X')
-                self.state = self.bot_start_center_second
+                self.state = self.bot_start_center
                 global start_center2nd
                 start_center2nd = True
             else:
@@ -503,10 +495,10 @@ def open_second_window():
                 global bot_corner1
                 bot_corner1 = True
 
-        def bot_start_center_second(self):
+        def bot_start_center(self):
             global start_center2nd
             start_center2nd = False
-            # Player goes to an edge.
+            # Bot goes to the furthest edge
             if 'button4' in moves_logger:
                 update_button_text(random.choice(['button3', 'button9']), 'X')
             elif 'button8' in moves_logger:
@@ -541,10 +533,8 @@ def open_second_window():
             if winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
-
             elif counter_button:
                 update_button_text(counter_button, 'X')
-                is_winner()
                 self.state = self.bot_start_center_edge_final
                 global bot_strt_center_edge_fnl
                 bot_strt_center_edge_fnl = True
@@ -553,8 +543,12 @@ def open_second_window():
             global bot_strt_center_edge_fnl
             bot_strt_center_edge_fnl = False
             winning_button = button_to_win(moves_logger, winning_combinations)
+            unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
             if winning_button:
                 update_button_text(winning_button, 'X')
+                is_winner()
+            elif unpressed_buttons:
+                update_button_text(random.choice(unpressed_buttons), 'X')
                 is_winner()
 
         def bot_start_center_corner(self):
@@ -720,9 +714,12 @@ def open_second_window():
             global bot_corner_human_mid1
             bot_corner_human_mid1 = False
             winning_button = button_to_win(moves_logger, winning_combinations)
-            if winning_button:
+            counter_button = button_to_counter(moves_logger, winning_combinations)
+            if winning_button and buttons[winning_button].cget('text') == '':
                 update_button_text(winning_button, 'X')
                 is_winner()
+            elif counter_button:
+                update_button_text(counter_button, 'X')
                 self.state = self.bot_corner_human_center2
                 global bot_corner_human_mid2
                 bot_corner_human_mid2 = True
@@ -736,6 +733,11 @@ def open_second_window():
                 update_button_text(random.choice(unpressed_buttons), 'X')
             is_winner()  # draw
 
+        def human_first0(self):
+            global human_1st
+            human_1st = True
+            print('human first is set to True')
+
         def human_first(self):
             global human_1st
             human_1st = False
@@ -748,21 +750,25 @@ def open_second_window():
 
             elif button1.cget('text') == 'O' or button3.cget('text') == 'O' or button7.cget('text') == 'O' or button9.cget('text') == 'O':
                 update_button_text('button5', 'X')
-                self.state = self.human_1st_corner  # human first move is to a corner
+                # human first move is to a corner
                 global human_go_corner
                 human_go_corner = True
 
             # Human 1st move is to an edge
             elif button2.cget('text') == 'O' or button4.cget('text') == 'O' or button6.cget('text') == 'O' or button8.cget('text') == 'O':
                 update_button_text('button5', 'X')
-                self.state = self.human_1st_edge
                 global human_first_edge
                 human_first_edge = True
 
         def human_1st_center1(self):
             global human_go_center #GOOD
             human_go_center = False
-            update_button_text(random.choice(corners), 'X')
+            print(moves_logger)
+            counter_button = button_to_counter(moves_logger, winning_combinations)
+            if counter_button:
+                update_button_text(counter_button, 'X')
+            else:
+                update_button_text(random.choice(corners), 'X')
             self.state = self.human_1st_center2
             global human_1st_is_center
             human_1st_is_center = True
@@ -770,8 +776,12 @@ def open_second_window():
         def human_1st_center2(self):
             global human_1st_is_center
             human_1st_is_center = False
+            winning_button = button_to_win(moves_logger, winning_combinations)
             counter_button = button_to_counter(moves_logger, winning_combinations)
-            if counter_button:
+            if winning_button:
+                update_button_text(winning_button, 'X')
+                is_winner()
+            elif counter_button:
                 update_button_text(counter_button, 'X')
             else:
                 unpressed_buttons = find_unpressed_buttons(corners, moves_logger)
@@ -784,35 +794,30 @@ def open_second_window():
         def human_1st_center3(self):
             global human_1st_cntr3
             human_1st_cntr3 = False
-            counter_button = button_to_counter(moves_logger, winning_combinations)
             winning_button = button_to_win(moves_logger, winning_combinations)
-            if counter_button:
+            counter_button = button_to_counter(moves_logger, winning_combinations)
+            if winning_button:
+                update_button_text(winning_button, 'X')
+                is_winner()
+            elif counter_button:
                 update_button_text(counter_button, 'X')
                 self.state = self.human_1st_center4
                 global human_1st_cntr4
                 human_1st_cntr4 = True
-            elif winning_button:
-                update_button_text(winning_button, 'X')
-                is_winner()
 
         def human_1st_center4(self):
             global human_1st_cntr4
             human_1st_cntr4 = False
+            is_winner()
             counter_button = button_to_counter(moves_logger, winning_combinations)
             if counter_button:
                 update_button_text(counter_button, 'X')
-                global check_winner_end
-                check_winner_end = True
+                is_winner()
             else:
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
                 if unpressed_buttons:
                     update_button_text(random.choice(unpressed_buttons), 'X')
-                    check_winner_end = True
-
-        def check_winner(self):
-            global check_winner_end
-            check_winner_end = False
-            is_winner()  # tie
+                    is_winner()
 
         def human_1st_corner(self):
             global human_go_corner
@@ -841,10 +846,14 @@ def open_second_window():
             human_1st_diagonal = False
             # doesn't block
             winning_button = button_to_win(moves_logger, winning_combinations)
+            counter_button = button_to_counter(moves_logger, winning_combinations)
             if winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
             # blocked
+            elif counter_button:
+                update_button_text(counter_button, 'X')
+                is_winner()
             else:
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
                 if unpressed_buttons:
@@ -864,16 +873,17 @@ def open_second_window():
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
                 if unpressed_buttons:
                     update_button_text(random.choice(unpressed_buttons), 'X')
-                self.state = self.check_winner
-                global check_winner_end
-                check_winner_end = True
+                    is_winner()
 
         def human_1st_corner_ntdiagonal(self):
             global human_1st_no_diag
             human_1st_no_diag = False
-            self.win_bttn()
+            winning_button = button_to_win(moves_logger, winning_combinations)
             counter_button = button_to_counter(moves_logger, winning_combinations)
-            if counter_button:
+            if winning_button:
+                update_button_text(winning_button, 'X')
+                is_winner()
+            elif counter_button:
                 update_button_text(counter_button, 'X')
             else:
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
@@ -886,17 +896,17 @@ def open_second_window():
         def human_1st_corner_ntdiagonal2(self):
             global human_1st_no_diag2
             human_1st_no_diag2 = False
-            self.win_bttn()
+            winning_button = button_to_win(moves_logger, winning_combinations)
             counter_button = button_to_counter(moves_logger, winning_combinations)
-            if counter_button:
+            if winning_button:
+                update_button_text(winning_button, 'X')
+            elif counter_button:
                 update_button_text(counter_button, 'X')
             else:
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
                 if unpressed_buttons:
                     update_button_text(random.choice(unpressed_buttons), 'X')
-            self.state = self.check_winner
-            global check_winner_end
-            check_winner_end = True
+            is_winner()
 
         def human_1st_edge(self):
             global human_first_edge
@@ -957,7 +967,7 @@ def open_second_window():
             if counter_button:
                 update_button_text(counter_button, 'X')
 
-            elif winning_button:
+            elif winning_button and buttons[winning_button].cget('text') == '':
                 update_button_text(winning_button, 'X')
                 is_winner()
 
@@ -989,6 +999,8 @@ def open_second_window():
             winning_button = button_to_win(moves_logger, winning_combinations)
             if counter_button:
                 update_button_text(counter_button, 'X')
+                global human_first_edge_end
+                human_first_edge_end = True
             elif winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
@@ -996,9 +1008,13 @@ def open_second_window():
                 unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
                 if unpressed_buttons:
                     update_button_text(random.choice(unpressed_buttons), 'X')
-            self.state = self.check_winner
-            global check_winner_end
-            check_winner_end = True
+                    human_first_edge_end = True
+
+        def human_1st_edge_end(self):
+            global human_first_edge_end
+            human_first_edge_end = False
+            is_winner()
+
 
     if not two_players:
         # Initialize the bot.
