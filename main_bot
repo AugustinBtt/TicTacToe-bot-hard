@@ -269,7 +269,9 @@ def open_second_window():
 
     # Function to handle button click FOR 2 PLAYERS
     def on_button_click(button):
-        if two_players and button.cget('text') == '':
+        if button.cget('text') != '':
+            return
+        if two_players:
             if game_state["is_player_x_turn"]:
                 button.config(text="X")
                 moves_logger.append(button_name(button))
@@ -468,8 +470,9 @@ def open_second_window():
                 update_button_text('button3', 'X')
 
     def update_button_text(bttn_name, new_text):
-        buttons[bttn_name].config(text=new_text)
-        moves_logger.append(bttn_name)
+        if buttons[bttn_name].cget('text') == '':
+            buttons[bttn_name].config(text=new_text)
+            moves_logger.append(bttn_name)
 
     class Bot:
         def __init__(self, bot_frst):
@@ -535,7 +538,7 @@ def open_second_window():
                 is_winner()
             elif counter_button:
                 update_button_text(counter_button, 'X')
-                self.state = self.bot_start_center_edge_final
+
                 global bot_strt_center_edge_fnl
                 bot_strt_center_edge_fnl = True
 
@@ -715,7 +718,7 @@ def open_second_window():
             bot_corner_human_mid1 = False
             winning_button = button_to_win(moves_logger, winning_combinations)
             counter_button = button_to_counter(moves_logger, winning_combinations)
-            if winning_button and buttons[winning_button].cget('text') == '':
+            if winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
             elif counter_button:
@@ -967,7 +970,7 @@ def open_second_window():
             if counter_button:
                 update_button_text(counter_button, 'X')
 
-            elif winning_button and buttons[winning_button].cget('text') == '':
+            elif winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
 
