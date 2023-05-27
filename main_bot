@@ -281,116 +281,63 @@ def open_second_window():
             game_state["is_player_x_turn"] = not game_state["is_player_x_turn"]
             is_winner()
         else:
+            button.config(text="O")
+            moves_logger.append(button_name(button))
             if start_center2nd:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center()
             elif bot_corner1:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
-                bot.bot_corner_human_1center()
+                bot.bot_start_corner()
             elif bot_strt_center_edg:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_edge()
             elif bot_strt_center_crn:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_corner()
             elif bot_strt_center_edge_fnl:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_edge_final()
             elif bot_strt_mid_final:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_final()
             elif bot_strt_mid_2ndcorner:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_corner_twice()
             elif bot_strt_mid_corner_final:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_start_center_corner_final2()
             elif bot_corner_human_not_cntr:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_corner_human_ntcenter_1()
             elif bot_corner_human_mid:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_corner_human_center()
             elif bot_corner_human_notmid_final:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_corner_human_ntcenter_final()
             elif bot_corner_human_mid1:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_corner_human_center1()
             elif bot_corner_human_mid2:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.bot_corner_human_center2()
             elif human_1st:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 print('Human first is executed')
                 bot.human_first()
             elif human_go_center:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_center1()
             elif human_1st_is_center:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_center2()
             elif human_1st_cntr3:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_center3()
             elif human_1st_cntr4:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_center4()
             elif human_go_corner:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_corner()
             elif human_1st_diagonal:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_corner_diagonal()
             elif human_1st_diagonal2:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_corner_diagonal2()
             elif human_1st_no_diag:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_corner_ntdiagonal()
             elif human_1st_no_diag2:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_corner_ntdiagonal2()
             elif human_first_edge:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_edge()
             elif human_first_edge2:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_edge_2()
             elif human_first_edge3:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_edge_3()
             elif human_first_edge_end:
-                button.config(text="O")
-                moves_logger.append(button_name(button))
                 bot.human_1st_edge_end()
-
 
     edges= ['button4', 'button2', 'button6', 'button8']
 
@@ -494,7 +441,7 @@ def open_second_window():
                 start_center2nd = True
             else:
                 update_button_text(random.choice(corners), 'X')
-                self.state = self.bot_corner_human_1center
+                self.state = self.bot_start_corner
                 global bot_corner1
                 bot_corner1 = True
 
@@ -504,28 +451,32 @@ def open_second_window():
             # Bot goes to the furthest edge
             if 'button4' in moves_logger:
                 update_button_text(random.choice(['button3', 'button9']), 'X')
+                global bot_strt_center_edg
+                bot_strt_center_edg = True
             elif 'button8' in moves_logger:
                 update_button_text(random.choice(['button1', 'button3']), 'X')
+                bot_strt_center_edg = True
             elif 'button6' in moves_logger:
                 update_button_text(random.choice(['button1', 'button7']), 'X')
+                bot_strt_center_edg = True
             elif 'button2' in moves_logger:
                 update_button_text(random.choice(['button7', 'button9']), 'X')
-            self.state = self.bot_start_center_edge
-            global bot_strt_center_edg
-            bot_strt_center_edg = True
+                bot_strt_center_edg = True
 
             # Player goes to a corner, mark opposite.
             if button1.cget('text') == 'O' and button5.cget('text') == 'X' and button9.cget('text') == '':
                 update_button_text('button9', 'X')
+                global bot_strt_center_crn
+                bot_strt_center_crn = True
             elif button3.cget('text') == 'O' and button5.cget('text') == 'X' and button7.cget('text') == '':
                 update_button_text('button7', 'X')
+                bot_strt_center_crn = True
             elif button7.cget('text') == 'O' and button5.cget('text') == 'X' and button3.cget('text') == '':
                 update_button_text('button3', 'X')
+                bot_strt_center_crn = True
             elif button9.cget('text') == 'O' and button5.cget('text') == 'X' and button1.cget('text') == '':
                 update_button_text('button1', 'X')
-            self.state = self.bot_start_center_corner
-            global bot_strt_center_crn
-            bot_strt_center_crn = True
+                bot_strt_center_crn = True
 
         # if player blocks bot, block it back: or in case it doesn't block, still makes a winning move
         def bot_start_center_edge(self):
@@ -538,7 +489,8 @@ def open_second_window():
                 is_winner()
             elif counter_button:
                 update_button_text(counter_button, 'X')
-
+                print('first good counter')
+                self.state = self.bot_start_center_edge_final
                 global bot_strt_center_edge_fnl
                 bot_strt_center_edge_fnl = True
 
@@ -548,9 +500,11 @@ def open_second_window():
             winning_button = button_to_win(moves_logger, winning_combinations)
             unpressed_buttons = find_unpressed_buttons(buttons_str, moves_logger)
             if winning_button:
+                print('moving to win')
                 update_button_text(winning_button, 'X')
                 is_winner()
             elif unpressed_buttons:
+                print('this is called ')
                 update_button_text(random.choice(unpressed_buttons), 'X')
                 is_winner()
 
@@ -560,19 +514,22 @@ def open_second_window():
             # PLAYER MAKES MISTAKE AND CHOOSE AN EDGE
             # NEED TO BLOCK + TRAP
             if button2.cget('text') == 'O' or button4.cget('text') == 'O' or button6.cget('text') == 'O' or button8.cget('text') == 'O':
+                winning_button = button_to_win(moves_logger, winning_combinations)
                 counter_button = button_to_counter(moves_logger, winning_combinations)
-                if counter_button:
+                if winning_button:
+                    update_button_text(winning_button, 'X')
+                    is_winner()
+                elif counter_button:
                     update_button_text(counter_button, 'X')
                     self.state = self.bot_start_center_final
                     global bot_strt_mid_final
                     bot_strt_mid_final = True
-
                 else:
                     unpressed_buttons = find_unpressed_buttons(corners, moves_logger)
                     if unpressed_buttons:
                         update_button_text(random.choice(unpressed_buttons), 'X')
-                    self.state = self.bot_start_center_final
-                    bot_strt_mid_final = True
+                        self.state = self.bot_start_center_final
+                        bot_strt_mid_final = True
 
             else:
                 # PLAYER CHOSES ANOTHER CORNER AS FOURTH MOVE
@@ -615,10 +572,10 @@ def open_second_window():
                 update_button_text(random.choice(unpressed_buttons), 'X')
             is_winner()  # TIE
 
-        def bot_corner_human_1center(self):
+        def bot_start_corner(self):
             global bot_corner1
             bot_corner1 = False
-            # HUMAN 1 st MOVE is NOT CENTER
+            # HUMAN 1 st MOVE is NOT center
             if button5.cget('text') == '':
                 corner_inrow()  # tick the free corner in the same row
                 self.state = self.bot_corner_human_ntcenter_1
@@ -967,12 +924,12 @@ def open_second_window():
 
             counter_button = button_to_counter(moves_logger, winning_combinations)
             winning_button = button_to_win(moves_logger, winning_combinations)
-            if counter_button:
-                update_button_text(counter_button, 'X')
-
-            elif winning_button:
+            if winning_button:
                 update_button_text(winning_button, 'X')
                 is_winner()
+
+            elif counter_button:
+                update_button_text(counter_button, 'X')
 
             elif 'button4' in moves_logger:
                 unpressed_buttons = find_unpressed_buttons(('button9', 'button3'), moves_logger)
