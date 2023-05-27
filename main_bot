@@ -6,6 +6,7 @@ import tkinter as tk
 two_players = None
 bot_first = True
 moves_logger = []  # logs moves made by the players
+button_names = {}
 
 def multiplayer():
     global two_players
@@ -94,30 +95,47 @@ def open_second_window():
     button1 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button1))
+    button_names[button1] = 'button1'
+
     button2 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button2))
+    button_names[button2] = 'button2'
+
     button3 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button3))
+    button_names[button3] = 'button3'
+
     button4 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button4))
+    button_names[button4] = 'button4'
+
     button5 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button5))
+    button_names[button5] = 'button5'
+
     button6 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button6))
+    button_names[button6] = 'button6'
+
     button7 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button7))
+    button_names[button7] = 'button7'
+
     button8 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button8))
+    button_names[button8] = 'button8'
+    
     button9 = Button(second_window, text="", width=6, height=4, padx=5, pady=5, bd=2, bg='#edbc2e',
                      activebackground='#edbc2e',
                      command=lambda: on_button_click(button9))
+    button_names[button9] = 'button9'
 
     button1.grid(row=0, column=0, in_=button_frame)
     button2.grid(row=0, column=1, in_=button_frame)
@@ -153,8 +171,6 @@ def open_second_window():
                         parent=second_window)
 
     # -------------------------- UI -------------------------------- #
-
-
 
     def is_winner():
         global player_x, player_o
@@ -263,7 +279,7 @@ def open_second_window():
             reset_game()
 
     def button_name(button):
-        return str(button).split(".")[-1][1:]
+        return button_names[button]
 
     game_state = {"is_player_x_turn": True, "starting_player": "X"}
 
